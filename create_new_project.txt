@@ -15,3 +15,5 @@ const nodemon =  require('nodemon') імпорт модуля
 const user = require('./user.js') імпорт з файлу
 const {user, contacts} = require('./user.js') з використанням деструктиризації
 Імпортувати можна під будь-яким ім'ям
+
+
