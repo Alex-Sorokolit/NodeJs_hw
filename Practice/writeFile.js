@@ -1,37 +1,38 @@
+// import { nanoid } from "nanoid";
+
 const path = require("path");
 const fs = require("fs").promises;
-const contacts = require("./db/contacts.json");
-// console.log(contacts);
 
-const contactsPath = path.resolve("./db/contacts.json");
+// fs.writeFile("one.txt", "some text", (err) => {
+//   if (err) {
+//     console.log(err.message);
+//   }
+// });
+const contactsPath = path.resolve("../db/contacts.json");
+// console.log(contactsPath);
 
-async function listContacts() {
+async function getFile() {
+  try {
+    const fileContent = await fs.readFile(contactsPath, { encoding: "utf8" });
+    const contactsData = JSON.parse(fileContent);
+    // console.log(contactsData);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+// getFile();
+
+async function copyFile() {
   try {
     const fileContent = await fs.readFile(contactsPath, { encoding: "utf8" });
     const contactsData = JSON.parse(fileContent);
     console.log(contactsData);
-    return contactsData;
+    await fs.writeFile("contacts2.json", JSON.stringify(contactsData));
   } catch (error) {
     console.log(error.message);
   }
 }
-// listContacts();
-
-async function getContactById(contactId) {
-  try {
-    const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
-    const contactsData = JSON.parse(fileContent);
-    const contact = contactsData.filter((c) => c.id === contactId);
-    console.log(contact);
-  } catch (error) {
-    console.log(error.message);
-  }
-}
-// getContactById("5");
-
-function removeContact(contactId) {
-  // ...твій код
-}
+// copyFile();
 
 async function addContact(name, email, phone) {
   try {
@@ -43,4 +44,4 @@ async function addContact(name, email, phone) {
     console.log(error.message);
   }
 }
-// addContact("Alex Tail", "tail@gmail.com", "(992) 915-3791");
+addContact("Alex Sorokolit", "sorokoligal@gmail.com", "+380980145051");
