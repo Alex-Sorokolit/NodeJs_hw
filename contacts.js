@@ -7,15 +7,25 @@ async function listContacts() {
   try {
     const fileContent = await fs.readFile(contactsPath, { encoding: "utf8" });
     const contactsData = JSON.parse(fileContent);
+    console.log(contactsData);
     return contactsData;
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 }
+// listContacts();
 
-function getContactById(contactId) {
-  // ...твій код
+async function getContactById(contactId) {
+  try {
+    const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
+    const contactsData = JSON.parse(fileContent);
+    const contact = contactsData.filter((c) => c.id === contactId);
+    console.log(contact);
+  } catch (error) {
+    console.log(error.message);
+  }
 }
+getContactById("5");
 
 function removeContact(contactId) {
   // ...твій код
