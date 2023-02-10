@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs").promises;
-const contacts = require("./db/contacts.json");
+// const contacts = require("./db/contacts.json");
 // console.log(contacts);
 
 const contactsPath = path.resolve("./db/contacts.json");
@@ -29,16 +29,26 @@ async function getContactById(contactId) {
 }
 // getContactById("5");
 
-function removeContact(contactId) {
-  // ...твій код
+async function removeContact(contactId) {
+  try {
+    const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
+    const contactsData = JSON.parse(fileContent);
+    const actualContacts = contactsData.filter(
+      (contact) => contact.id !== contactId
+    );
+    await fs.writeFile(contactsPath, JSON.stringify(actualContacts));
+  } catch (error) {
+    console.log(error.message);
+  }
 }
+removeContact("11");
 
 async function addContact(name, email, phone) {
   try {
     const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
     const contactsData = JSON.parse(fileContent);
-    const actualContacts = [...contactsData, { id: "11", name, email, phone }];
-    await fs.writeFile("upgradeContacts.json", JSON.stringify(actualContacts));
+    const actualContacts = [...contactsData, { id: "12", name, email, phone }];
+    await fs.writeFile(contactsPath, JSON.stringify(actualContacts));
   } catch (error) {
     console.log(error.message);
   }
