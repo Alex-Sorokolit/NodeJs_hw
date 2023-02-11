@@ -1,21 +1,21 @@
-#Home Work 1
+# Home Work 1
 
-##ListContacts
+## ListContacts
 
 ![listContacts](./assets/listContacts.jpg)
 
-##getContactById
+## getContactById
 
 ![getContactById](./assets/getContactById.jpg)
 
-##addContact
+## addContact
 
 ![addContact](./assets/addContact.jpg)
 
-##removeContact
+## removeContact
 
 ![removeContact](./assets/removeContact.jpg)
 
-##allTerminal
+## allTerminal
 
 ![allTerminal](./assets/allTerminal.jpg)
