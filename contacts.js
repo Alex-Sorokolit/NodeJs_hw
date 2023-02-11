@@ -1,3 +1,5 @@
+const { v4 } = require("uuid");
+
 const path = require("path");
 const fs = require("fs").promises;
 
@@ -6,9 +8,8 @@ const contactsPath = path.resolve("./db/contacts.json");
 async function listContacts() {
   try {
     const fileContent = await fs.readFile(contactsPath, { encoding: "utf8" });
-    const contactsData = JSON.parse(fileContent);
-    console.log(contactsData);
-    return contactsData;
+    const contacts = JSON.parse(fileContent);
+    return contacts;
   } catch (error) {
     console.log(error.message);
   }
@@ -16,10 +17,9 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   try {
-    const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
-    const contactsData = JSON.parse(fileContent);
-    const contact = contactsData.filter((contact) => contact.id === contactId);
-    console.log(contact);
+    const contacts = await listContacts();
+    const contact = contacts.filter((contact) => contact.id === contactId);
+    return contact;
   } catch (error) {
     console.log(error.message);
   }
@@ -27,9 +27,8 @@ async function getContactById(contactId) {
 
 async function removeContact(contactId) {
   try {
-    const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
-    const contactsData = JSON.parse(fileContent);
-    const actualContacts = contactsData.filter(
+    const contacts = await listContacts();
+    const actualContacts = contacts.filter(
       (contact) => contact.id !== contactId
     );
     await fs.writeFile(contactsPath, JSON.stringify(actualContacts));
@@ -40,19 +39,20 @@ async function removeContact(contactId) {
 
 async function addContact(name, email, phone) {
   try {
-    const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
-    const contactsData = JSON.parse(fileContent);
+    const contacts = await listContacts();
 
-    const maxId = contactsData.reduce((acc, contact) => {
-      if (Number(contact.id) > acc) {
-        acc = contact.id;
-      }
-      return acc;
-    }, 0);
-    const id = String(Number(maxId) + 1);
+    id = v4();
 
-    const actualContacts = [...contactsData, { id, name, email, phone }];
-    await fs.writeFile(contactsPath, JSON.stringify(actualContacts));
+    const newContact = {
+      id,
+      name,
+      email,
+      phone,
+    };
+    contacts.push(newContact);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return newContact;
   } catch (error) {
     console.log(error.message);
   }
