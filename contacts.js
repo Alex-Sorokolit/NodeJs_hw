@@ -1,7 +1,5 @@
 const path = require("path");
 const fs = require("fs").promises;
-// const contacts = require("./db/contacts.json");
-// console.log(contacts);
 
 const contactsPath = path.resolve("./db/contacts.json");
 
@@ -15,19 +13,17 @@ async function listContacts() {
     console.log(error.message);
   }
 }
-// listContacts();
 
 async function getContactById(contactId) {
   try {
     const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
     const contactsData = JSON.parse(fileContent);
-    const contact = contactsData.filter((c) => c.id === contactId);
+    const contact = contactsData.filter((contact) => contact.id === contactId);
     console.log(contact);
   } catch (error) {
     console.log(error.message);
   }
 }
-// getContactById("5");
 
 async function removeContact(contactId) {
   try {
@@ -41,16 +37,25 @@ async function removeContact(contactId) {
     console.log(error.message);
   }
 }
-removeContact("11");
 
 async function addContact(name, email, phone) {
   try {
     const fileContent = await fs.readFile(contactsPath, { encoding: "utf-8" });
     const contactsData = JSON.parse(fileContent);
-    const actualContacts = [...contactsData, { id: "12", name, email, phone }];
+
+    const maxId = contactsData.reduce((acc, contact) => {
+      if (Number(contact.id) > acc) {
+        acc = contact.id;
+      }
+      return acc;
+    }, 0);
+    const id = String(Number(maxId) + 1);
+
+    const actualContacts = [...contactsData, { id, name, email, phone }];
     await fs.writeFile(contactsPath, JSON.stringify(actualContacts));
   } catch (error) {
     console.log(error.message);
   }
 }
-// addContact("Alex Tail", "tail@gmail.com", "(992) 915-3791");
+
+module.exports = { listContacts, getContactById, removeContact, addContact };
